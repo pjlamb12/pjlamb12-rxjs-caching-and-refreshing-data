@@ -1,0 +1,12 @@
+<hello name="{{ name }}"></hello>
+<p>
+  Start editing to see some magic happen :)
+</p>
+
+<p>
+  People in app.component: {{ people$ | async | json}}
+</p>
+
+<p *ngIf="showNewSection">
+  People in app.component: {{ people$ | async | json}}
+</p>
