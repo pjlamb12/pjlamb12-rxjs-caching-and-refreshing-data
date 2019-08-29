@@ -12,6 +12,8 @@ import {
   mergeMap
   } from 'rxjs/operators';
 
+import { renewAfterTimer } from './renew-after-timer.observable';
+
 @Injectable()
 export class SwapiService {
   private baseUrl: string = 'https://swapi.co/api'
@@ -20,8 +22,9 @@ export class SwapiService {
   constructor(private _http: HttpClient) { }
 
   public shared$: Observable<any>;
+  private httpGet$ = this._http.get(`${this.baseUrl}/people`);
 
-  createShared = () => this.shared$ = this._http.get(`${this.baseUrl}/people`).pipe(
+  createShared = () => this.shared$ = this.httpGet$.pipe(
     map((data: any) => {
       const random = Math.floor(Math.random() * 6)
       return data.results[random]
@@ -35,4 +38,5 @@ export class SwapiService {
   )
 
   public peopleReplay$ = this.cachedRefreshable$;
+  public peopleReplay2$ = renewAfterTimer(this.httpGet$, 2500);
 }
